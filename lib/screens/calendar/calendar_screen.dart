@@ -176,18 +176,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'MoodSync',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: CustomColors().getAppBarMainColor(),
-      ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddEventDialog(),
@@ -329,19 +317,19 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 dowBuilder: (context, day) {
                   String text;
                   if (day.weekday == DateTime.sunday) {
-                    text = 'dom';
+                    text = 'Dom';
                   } else if (day.weekday == DateTime.monday) {
-                    text = 'seg';
+                    text = 'Seg';
                   } else if (day.weekday == DateTime.tuesday) {
-                    text = 'ter';
+                    text = 'Ter';
                   } else if (day.weekday == DateTime.wednesday) {
-                    text = 'qua';
+                    text = 'Qua';
                   } else if (day.weekday == DateTime.thursday) {
-                    text = 'qui';
+                    text = 'Qui';
                   } else if (day.weekday == DateTime.friday) {
-                    text = 'sex';
+                    text = 'Sex';
                   } else if (day.weekday == DateTime.saturday) {
-                    text = 'sáb';
+                    text = 'Sáb';
                   } else {
                     text = 'err';
                   }
@@ -377,9 +365,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
               leading: const Icon(Icons.done, color: Colors.grey),
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text('Event Title:   ${myEvents.eventTitle}'),
+                child: Text('Emoção do dia:   ${myEvents.eventTitle}'),
               ),
-              subtitle: Text('Description:   ${myEvents.eventDescp}'),
+              subtitle: Text('Descrição:   ${myEvents.eventDescp}'),
             ),
           ),
         ],
