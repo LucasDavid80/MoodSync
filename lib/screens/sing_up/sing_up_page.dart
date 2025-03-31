@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../shared/constants/custom_colors.dart';
-import 'sing_up_service.dart';
+import '../../services/sing_up_service.dart';
 
 class SingUpPage extends StatefulWidget {
   const SingUpPage({super.key});
@@ -11,11 +11,14 @@ class SingUpPage extends StatefulWidget {
 }
 
 class _SingUpPageState extends State<SingUpPage> {
+  bool queroEntrar = true;
   final TextEditingController _nameInputController = TextEditingController();
   final TextEditingController _mailInputController = TextEditingController();
   final TextEditingController _passwordInputController =
       TextEditingController();
   final TextEditingController _confirmInputController = TextEditingController();
+
+  SignUpService _authService = SignUpService();
 
   bool showPassword = false;
 
@@ -195,10 +198,13 @@ class _SingUpPageState extends State<SingUpPage> {
   }
 
   void _doSingUp() {
+    String nome = _nameInputController.text;
+    String email = _mailInputController.text;
+    String password = _passwordInputController.text;
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
-        SignUpService()
-            .signUp(_mailInputController.text, _passwordInputController.text)
+        _authService
+            .registerUser(name: nome, email: email, password: password)
             .then((value) {
               final snackBar = SnackBar(
                 content: const Text('Usuário cadastrado com sucesso!'),
@@ -244,5 +250,28 @@ class _SingUpPageState extends State<SingUpPage> {
   //     PreferencesKeys.activeUser,
   //     json.encode(user.toJson()),
   //   );
+  // }
+
+  // botaoPrincipalUsado() {
+  //   if (_formKey.currentState != null) {
+  //     if (_formKey.currentState!.validate()) {
+  //       SignUpService()
+  //           .signUp(_mailInputController.text, _passwordInputController.text)
+  //           .then((value) {
+  //         Navigator.pushReplacementNamed(context, '/diary');
+  //       });
+  //     }
+  //   } else {
+  //     final snackBar = SnackBar(
+  //       content: const Text('Erro!!'),
+  //       action: SnackBarAction(
+  //         label: 'Dispensar',
+  //         onPressed: () {
+  //           ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  //         },
+  //       ),
+  //     );
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //   }
   // }
 }
