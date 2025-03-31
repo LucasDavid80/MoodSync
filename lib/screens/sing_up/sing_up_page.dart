@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_sync/screens/core/my_snackbar.dart';
 
 import '../../shared/constants/custom_colors.dart';
 import '../../services/sing_up_service.dart';
@@ -18,7 +19,7 @@ class _SingUpPageState extends State<SingUpPage> {
       TextEditingController();
   final TextEditingController _confirmInputController = TextEditingController();
 
-  SignUpService _authService = SignUpService();
+  final SignUpService _authService = SignUpService();
 
   bool showPassword = false;
 
@@ -187,7 +188,6 @@ class _SingUpPageState extends State<SingUpPage> {
               ),
               onPressed: () {
                 _doSingUp();
-                Navigator.pop(context);
               },
               child: const Text('Cadastrar', style: TextStyle(fontSize: 18)),
             ),
@@ -201,77 +201,34 @@ class _SingUpPageState extends State<SingUpPage> {
     String nome = _nameInputController.text;
     String email = _mailInputController.text;
     String password = _passwordInputController.text;
-    if (_formKey.currentState != null) {
-      if (_formKey.currentState!.validate()) {
-        _authService
-            .registerUser(name: nome, email: email, password: password)
-            .then((value) {
-              final snackBar = SnackBar(
-                content: const Text('Usuário cadastrado com sucesso!'),
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+      _authService
+          .registerUser(name: nome, email: email, password: password)
+          .then((String? error) {
+            if (error != null) {
+              //Deu ruim
+              SnackBar snackBar = SnackBar(
+                content: Text(error),
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.0),
+                  ),
+                ),
+                duration: Duration(seconds: 4),
                 action: SnackBarAction(
                   label: 'Dispensar',
+                  textColor: Colors.white,
                   onPressed: () {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   },
                 ),
               );
+
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            });
-      }
-    } else {
-      final snackBar = SnackBar(
-        content: const Text('Erro!!'),
-        action: SnackBarAction(
-          label: 'Dispensar',
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          });
     }
-    // LoginModel newUser = LoginModel(
-    //   name: _nameInputController.text,
-    //   mail: _mailInputController.text,
-    //   password: _passwordInputController.text,
-    //   keepOn: true,
-    // );
-    // ignore: avoid_print
-    // print(newUser);
-
-    // _saveUser(newUser);
+    Navigator.pop(context);
   }
-
-  // ignore: unused_element
-  // void _saveUser(LoginModel user) async {
-  //   // FirebaseDatabase database = FirebaseDatabase.instance;
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString(
-  //     PreferencesKeys.activeUser,
-  //     json.encode(user.toJson()),
-  //   );
-  // }
-
-  // botaoPrincipalUsado() {
-  //   if (_formKey.currentState != null) {
-  //     if (_formKey.currentState!.validate()) {
-  //       SignUpService()
-  //           .signUp(_mailInputController.text, _passwordInputController.text)
-  //           .then((value) {
-  //         Navigator.pushReplacementNamed(context, '/diary');
-  //       });
-  //     }
-  //   } else {
-  //     final snackBar = SnackBar(
-  //       content: const Text('Erro!!'),
-  //       action: SnackBarAction(
-  //         label: 'Dispensar',
-  //         onPressed: () {
-  //           ScaffoldMessenger.of(context).hideCurrentSnackBar();
-  //         },
-  //       ),
-  //     );
-  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  //   }
-  // }
 }
