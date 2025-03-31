@@ -1,19 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class LoginService {
-  login(String mail, String password) /*async*/ {
-    if (mail == 'lucas@gmail.com' && password == '123456') {
-      print('Login efetuado com sucesso!');
-      return true;
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  Future<String?> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      return null;
+    } on FirebaseAuthException catch (e) {
+      print('Error: $e');
+      return e.message;
     }
-    return false;
-    // http.Response response = await http.post(
-    //   Uri.parse(Routes.login),
-    //   body: json.encode(
-    //     {
-    //       "email": mail,
-    //       "password": password,
-    //       "returnSecureToken": true,
-    //     },
-    //   ),
-    // );
+  }
+
+  Future<void> logoutUser() async {
+    return _firebaseAuth.signOut();
   }
 }
