@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../shared/constants/custom_colors.dart';
-import '../login_service.dart';
+import '../../../services/login_service.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
