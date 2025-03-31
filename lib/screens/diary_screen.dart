@@ -22,14 +22,6 @@ class DiaryScreen extends StatelessWidget {
           backgroundColor: CustomColors().getAppBarMainColor(),
         ),
         body: Center(child: CalendarScreen()),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Ação do botão flutuante
-            print('Clicou!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-          },
-          backgroundColor: CustomColors().getActivePrimaryButtonColor(),
-          child: const Icon(Icons.add, color: Colors.white, size: 30),
-        ),
         drawer: Drawer(
           child: ListView(
             padding: const EdgeInsets.all(0),
