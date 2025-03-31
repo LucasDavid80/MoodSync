@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mood_sync/screens/calendar/calendar_screen.dart';
+import 'package:mood_sync/services/login_service.dart';
 import 'package:mood_sync/shared/constants/custom_colors.dart';
 
 class DiaryScreen extends StatelessWidget {
@@ -57,8 +58,7 @@ class DiaryScreen extends StatelessWidget {
                 ),
                 title: const Text('Sair'),
                 onTap: () {
-                  // ignore: avoid_print
-                  print('Saiu');
+                  LoginService().logoutUser();
                 },
               ),
             ],
