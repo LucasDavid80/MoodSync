@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mood_sync/screens/calendar/calendar_screen.dart';
@@ -32,9 +33,27 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginPage(),
+        '/': (context) => RouterScreen(),
         '/diary': (context) => DiaryScreen(),
         '/calendar': (context) => CalendarScreen(),
+      },
+    );
+  }
+}
+
+class RouterScreen extends StatelessWidget {
+  const RouterScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.userChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return DiaryScreen();
+        } else {
+          return LoginPage();
+        }
       },
     );
   }
