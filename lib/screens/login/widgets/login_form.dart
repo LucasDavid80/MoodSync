@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_sync/screens/core/my_snackbar.dart';
 
 import '../../../shared/constants/custom_colors.dart';
 import '../../../services/login_service.dart';
@@ -17,6 +18,7 @@ class _LoginFormState extends State<LoginForm> {
 
   bool _obscurePassword = false;
   final _formKey = GlobalKey<FormState>();
+  final LoginService _authService = LoginService();
 
   @override
   Widget build(BuildContext context) {
@@ -121,32 +123,38 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _doLogin() async {
+    String email = _mailInputController.text;
+    String password = _passwordInputController.text;
     if (_formKey.currentState!.validate()) {
-      bool validacao = LoginService().login(
-        _mailInputController.text,
-        _passwordInputController.text,
-      );
-      if (validacao) {
-        // Navegar para a Calendar
-        Navigator.pushReplacementNamed(context, '/diary');
-      }
+      _authService.loginUser(email: email, password: password).then((
+        String? error,
+      ) {
+        if (error != null) {
+          // deu ruim
+          SnackBar snackBar = SnackBar(
+            content: Text(error),
+            backgroundColor: Colors.red,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
+            ),
+            duration: Duration(seconds: 4),
+            action: SnackBarAction(
+              label: 'Dispensar',
+              textColor: Colors.white,
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+            ),
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      });
     } else {
-      print('Deu ruim!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-      // ignore: avoid_print
-      print('Inválido');
+      print(
+        'Erro na validação dos campos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+      );
     }
-    //EXEMPLOS
-    // String mailForm = _mailInputController.text;
-    // String passForm = _passwordInputController.text;
-
-    // LoginModel savedUser = await _getSavedUser();
-
-    // if (mailForm == savedUser.mail && passForm == savedUser.password) {
-    //   // ignore: avoid_print
-    //   print("Login efetuado com sucesso!!");
-    // } else {
-    //   // ignore: avoid_print
-    //   print("Falha no login!");
     // }
   }
 }
