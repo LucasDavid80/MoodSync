@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => RouterScreen(),
-        '/diary': (context) => DiaryScreen(),
+        // '/diary': (context) => DiaryScreen(),
         '/calendar': (context) => CalendarScreen(),
       },
     );
@@ -50,7 +50,7 @@ class RouterScreen extends StatelessWidget {
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return DiaryScreen();
+          return DiaryScreen(user: snapshot.data!);
         } else {
           return LoginPage();
         }
