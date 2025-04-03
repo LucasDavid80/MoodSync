@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mood_sync/screens/core/my_snackbar.dart';
+import 'package:mood_sync/services/sing_up_service.dart';
 
 import '../../shared/constants/custom_colors.dart';
-import '../../services/sing_up_service.dart';
 
 class SingUpPage extends StatefulWidget {
   const SingUpPage({super.key});
