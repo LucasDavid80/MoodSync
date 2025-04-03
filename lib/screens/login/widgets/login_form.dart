@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mood_sync/screens/core/my_snackbar.dart';
 
 import '../../../shared/constants/custom_colors.dart';
 import '../../../services/login_service.dart';
@@ -74,17 +73,6 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
           ),
-          // GestureDetector(
-          //   onTap: () {},
-          //   child: const Text(
-          //     'Esqueceu a senha?',
-          //     textAlign: TextAlign.right,
-          //     style: TextStyle(
-          //       color: Colors.white,
-          //       fontSize: 12,
-          //     ),
-          //   ),
-          // ),
           Row(
             children: [
               Checkbox(
