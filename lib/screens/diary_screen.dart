@@ -1,11 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mood_sync/screens/calendar/calendar_screen.dart';
 import 'package:mood_sync/services/login_service.dart';
 import 'package:mood_sync/shared/constants/custom_colors.dart';
 
-class DiaryScreen extends StatelessWidget {
-  const DiaryScreen({super.key});
+class DiaryScreen extends StatefulWidget {
+  final User user;
+  const DiaryScreen({super.key, required this.user});
 
+  @override
+  State<DiaryScreen> createState() => _DiaryScreenState();
+}
+
+class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,8 +38,8 @@ class DiaryScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: CustomColors().getAppBarMainColor(),
                 ),
-                accountEmail: const Text('lucas@gmail.com'),
-                accountName: const Text('Lucas David'),
+                accountEmail: Text((widget.user.displayName ?? "")),
+                accountName: Text(widget.user.email!),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Text(
@@ -49,7 +56,7 @@ class DiaryScreen extends StatelessWidget {
                   Icons.settings,
                   color: CustomColors().getGradientMainColor(),
                 ),
-                title: const Text('Configurações'),
+                title: const Text('Configurações2'),
               ),
               ListTile(
                 leading: Icon(
