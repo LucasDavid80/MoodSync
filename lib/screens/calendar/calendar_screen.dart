@@ -41,7 +41,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     selectedCalendarDate = _focusedCalendarDate;
-    // print('selectedCalendarDate: $selectedCalendarDate');
     mySelectedEvents = {};
     super.initState();
   }
@@ -57,18 +56,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return mySelectedEvents[dateTime] ?? [];
   }
 
-  // void _dropDownItemSelected(String novoItem) {
-  //   setState(() {
-  //     _itemSelecionado = novoItem;
-  //   });
-  // }
-
   _showAddEventDialog() async {
     await showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('New Event'),
+            title: const Text('Nova emoção!'),
             content: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -83,45 +76,39 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         );
                       }).toList(),
                   onChanged: (String? novoItemSelecionado) {
-                    // _dropDownItemSelected(novoItemSelecionado!);
                     setState(() {
                       _itemSelecionado = novoItemSelecionado!;
-                      // print('selectedCalendarDate: $selectedCalendarDate');
                     });
                     titleController.text = _itemSelecionado;
                   },
                   value: _itemSelecionado,
                 ),
-                // buildTextField(
-                //     controller: titleController, hint: 'Enter Title'),
                 const SizedBox(height: 20.0),
                 buildTextField(
                   controller: descpController,
-                  hint: 'Enter Description',
+                  hint: 'Insirá a descrição:',
                 ),
               ],
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
+                child: const Text('Cancelar'),
               ),
               TextButton(
-                child: const Text('Add'),
+                child: const Text('Adicionar'),
                 onPressed: () {
                   if (titleController.text.isEmpty &&
                       descpController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Please enter title & description'),
+                        content: Text('Entre com a emoção do dia:'),
                         duration: Duration(seconds: 3),
                       ),
                     );
-                    //Navigator.pop(context);
                     return;
                   } else {
                     setState(() {
-                      // print('selectedCalendarDate: $selectedCalendarDate');
                       if (mySelectedEvents[selectedCalendarDate] != null) {
                         mySelectedEvents[selectedCalendarDate]?.add(
                           MyEvents(
