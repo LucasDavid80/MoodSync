@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginService {
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Future<String?> loginUser({
     required String email,
     required String password,
@@ -14,7 +14,6 @@ class LoginService {
 
       return null;
     } on FirebaseAuthException catch (e) {
-      print('Error: $e');
       return e.message;
     }
   }
