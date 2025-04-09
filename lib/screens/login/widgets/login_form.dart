@@ -101,13 +101,29 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             onPressed: () {
-              _doLogin();
+              // _doLogin();
+              if (fazerlogin()) {
+                Navigator.pushReplacementNamed(context, '/diary');
+              } else {
+                print('Erro na validação dos campos');
+              }
             },
             child: const Text('Login', style: TextStyle(fontSize: 18)),
           ),
         ],
       ),
     );
+  }
+
+  bool fazerlogin() {
+    if (_formKey.currentState!.validate()) {
+      return true;
+    } else {
+      print(
+        'Erro na validação dos campos!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
+      );
+      return false;
+    }
   }
 
   void _doLogin() async {
