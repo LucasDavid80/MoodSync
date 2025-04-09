@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = FirebaseAuth.instance.currentUser!;
     return MaterialApp(
       title: 'MoodSync',
       // debugShowCheckedModeBanner: false,
@@ -33,9 +34,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => RouterScreen(),
-        // '/diary': (context) => DiaryScreen(),
-        '/calendar': (context) => CalendarScreen(),
+        '/': (context) => LoginPage(),
+        '/diary': (context) => DiaryScreen(user: user),
+        '/calendar': (context) => CalendarScreen(user: user),
       },
     );
   }
