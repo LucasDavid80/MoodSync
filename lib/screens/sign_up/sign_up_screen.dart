@@ -3,14 +3,14 @@ import 'package:mood_sync/services/sing_up_service.dart';
 
 import '../../shared/constants/custom_colors.dart';
 
-class SingUpPage extends StatefulWidget {
-  const SingUpPage({super.key});
+class SingUpScreen extends StatefulWidget {
+  const SingUpScreen({super.key});
 
   @override
-  State<SingUpPage> createState() => _SingUpPageState();
+  State<SingUpScreen> createState() => _SingUpScreenState();
 }
 
-class _SingUpPageState extends State<SingUpPage> {
+class _SingUpScreenState extends State<SingUpScreen> {
   bool queroEntrar = true;
   final TextEditingController _nameInputController = TextEditingController();
   final TextEditingController _mailInputController = TextEditingController();

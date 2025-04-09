@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../shared/constants/custom_colors.dart';
-import '../../sign_up/sign_up_page.dart';
+import '../../sign_up/sign_up_screen.dart';
 
 class LoginSignUpInvite extends StatefulWidget {
   const LoginSignUpInvite({super.key});
@@ -43,7 +43,7 @@ class _LoginSignUpInviteState extends State<LoginSignUpInvite> {
               showBarModalBottomSheet(
                 context: context,
                 builder: (context) {
-                  return const SingUpPage();
+                  return const SingUpScreen();
                 },
               );
             },
