@@ -1,42 +1,33 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_sync/models/user_model.dart';
 import 'package:mood_sync/shared/constants/custom_colors.dart';
+import 'package:mood_sync/shared/constants/emotion_constants.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../../models/my_events.dart';
+import '../../models/my_emotion.dart';
+import '../../shared/widgets/add_emotion_dialog.dart';
 
 var now = DateTime.now();
 var firstDay = DateTime(now.year, now.month - 6, now.day);
 var lastDay = DateTime(now.year, now.month + 6, now.day);
 
 class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({super.key});
+  final User user;
+  const CalendarScreen({super.key, required this.user});
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  String nomeCidade = "";
-  final _sentimentos = [
-    '1 - Arrasado 😭',
-    '3 - Frustrado 😕',
-    '2 - Muito Triste ☹️',
-    '4 - Cansado 😐',
-    '5 - Indiferente 🤔',
-    '6 - Satisfeito 😊',
-    '7 - Tranquilo 🙂',
-    '8 - Alegre 😀',
-    '9 - Muito Feliz 😃',
-    '10 - Radiante 🤩',
-  ];
-  var _itemSelecionado = '5 - Indiferente 🤔';
+  var _itemSelecionado = sentimentos[4];
 
   var _focusedCalendarDate = DateTime.now().toLocal();
   DateTime? selectedCalendarDate;
   final titleController = TextEditingController();
   final descpController = TextEditingController();
 
-  late Map<DateTime, List<MyEvents>> mySelectedEvents;
+  late Map<DateTime, List<MyEmotion>> mySelectedEvents;
 
   @override
   void initState() {
@@ -52,7 +43,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
     super.dispose();
   }
 
-  List<MyEvents> _listOfDayEvents(DateTime dateTime) {
+  List<MyEmotion> _listOfDayEvents(DateTime dateTime) {
+    // Retorna as emoções associadas à data selecionada
     return mySelectedEvents[dateTime] ?? [];
   }
 
@@ -60,81 +52,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
     await showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            title: const Text('Nova emoção!'),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                DropdownButtonFormField<String>(
-                  isExpanded: true,
-                  items:
-                      _sentimentos.map((String dropDownStringItem) {
-                        return DropdownMenuItem<String>(
-                          value: dropDownStringItem,
-                          child: Text(dropDownStringItem),
-                        );
-                      }).toList(),
-                  onChanged: (String? novoItemSelecionado) {
-                    setState(() {
-                      _itemSelecionado = novoItemSelecionado!;
-                    });
-                    titleController.text = _itemSelecionado;
-                  },
-                  value: _itemSelecionado,
-                ),
-                const SizedBox(height: 20.0),
-                buildTextField(
-                  controller: descpController,
-                  hint: 'Insirá a descrição:',
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancelar'),
-              ),
-              TextButton(
-                child: const Text('Adicionar'),
-                onPressed: () {
-                  if (titleController.text.isEmpty &&
-                      descpController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Entre com a emoção do dia:'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
-                    return;
-                  } else {
-                    setState(() {
-                      if (mySelectedEvents[selectedCalendarDate] != null) {
-                        mySelectedEvents[selectedCalendarDate]?.add(
-                          MyEvents(
-                            eventTitle: titleController.text,
-                            eventDescp: descpController.text,
-                          ),
-                        );
-                      } else {
-                        mySelectedEvents[selectedCalendarDate!] = [
-                          MyEvents(
-                            eventTitle: titleController.text,
-                            eventDescp: descpController.text,
-                          ),
-                        ];
-                      }
-                    });
-
-                    titleController.clear();
-                    descpController.clear();
-
-                    Navigator.pop(context);
-                    return;
-                  }
-                },
-              ),
-            ],
+          (context) => AddEmotionDialog(
+            sentimentos: sentimentos,
+            titleController: titleController,
+            descpController: descpController,
+            itemSelecionado: _itemSelecionado,
+            date: selectedCalendarDate!,
+            onItemChanged: (novoItemSelecionado) {
+              setState(() {
+                _itemSelecionado = novoItemSelecionado;
+                titleController.text = _itemSelecionado;
+              });
+            },
+            onEmotionAdded: (emotion) {
+              setState(() {
+                if (mySelectedEvents[selectedCalendarDate] != null) {
+                  mySelectedEvents[selectedCalendarDate]?.add(emotion);
+                } else {
+                  mySelectedEvents[selectedCalendarDate!] = [emotion];
+                }
+              });
+              titleController.clear();
+              descpController.clear();
+            },
           ),
     );
   }
@@ -179,7 +119,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               side: BorderSide(color: Colors.black.withOpacity(0.1), width: .5),
             ),
             child: TableCalendar(
-              locale: 'pt_BR',
+              // locale: 'pt_BR',
               focusedDay: _focusedCalendarDate,
               firstDay: firstDay,
               lastDay: lastDay,
@@ -341,22 +281,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   setState(() {
                     selectedCalendarDate = selectedDay;
                     _focusedCalendarDate = focusedDay;
-                    // print('selectedCalendarDate: $selectedCalendarDate');
                   });
                 }
               },
             ),
           ),
-          ..._listOfDayEvents(selectedCalendarDate!).map(
-            (myEvents) => ListTile(
+          ..._listOfDayEvents(selectedCalendarDate!).map((myEmotions) {
+            debugPrint('Emoção do dia:   ${myEmotions.emocao}');
+            debugPrint('Descrição:   ${myEmotions.descricao}');
+            return ListTile(
               leading: const Icon(Icons.done, color: Colors.grey),
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text('Emoção do dia:   ${myEvents.eventTitle}'),
+                child: Text('Emoção do dia:   ${myEmotions.emocao}'),
               ),
-              subtitle: Text('Descrição:   ${myEvents.eventDescp}'),
-            ),
-          ),
+              subtitle: Text('Descrição:   ${myEmotions.descricao}'),
+            );
+          }),
         ],
       ),
     );

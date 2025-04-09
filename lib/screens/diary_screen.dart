@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mood_sync/models/user_model.dart';
 import 'package:mood_sync/screens/calendar/calendar_screen.dart';
 import 'package:mood_sync/services/login_service.dart';
 import 'package:mood_sync/shared/constants/custom_colors.dart';
 
 class DiaryScreen extends StatefulWidget {
-  final User user;
+  final User user; // Alterado de User para UserModel
   const DiaryScreen({super.key, required this.user});
 
   @override
@@ -15,6 +16,7 @@ class DiaryScreen extends StatefulWidget {
 class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
+    ;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -29,7 +31,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
           centerTitle: true,
           backgroundColor: CustomColors().getAppBarMainColor(),
         ),
-        body: Center(child: CalendarScreen()),
+        body: Center(child: CalendarScreen(user: widget.user)),
         drawer: Drawer(
           child: ListView(
             padding: const EdgeInsets.all(0),
@@ -38,7 +40,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 decoration: BoxDecoration(
                   color: CustomColors().getAppBarMainColor(),
                 ),
-                accountEmail: Text((widget.user.displayName ?? "")),
+                accountEmail: Text(
+                  (widget.user.displayName != null)
+                      ? widget.user.displayName!
+                      : 'Usuário',
+                ),
                 accountName: Text(widget.user.email!),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,

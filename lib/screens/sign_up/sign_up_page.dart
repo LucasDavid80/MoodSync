@@ -204,8 +204,9 @@ class _SingUpPageState extends State<SingUpPage> {
       _authService
           .registerUser(name: nome, email: email, password: password)
           .then((String? error) {
+            if (!mounted) return; // Verifica se o widget ainda está montado
             if (error != null) {
-              //Deu ruim
+              // Deu ruim
               SnackBar snackBar = SnackBar(
                 content: Text(error),
                 backgroundColor: Colors.red,
@@ -228,6 +229,8 @@ class _SingUpPageState extends State<SingUpPage> {
             }
           });
     }
-    Navigator.pop(context);
+    if (mounted) {
+      Navigator.pop(context); // Verifica novamente antes de usar o contexto
+    }
   }
 }

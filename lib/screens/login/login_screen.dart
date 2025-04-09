@@ -126,15 +126,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  // ignore: unused_element
-  // Future<LoginModel> _getSavedUser() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String jsonUser = prefs.getString(PreferencesKeys.activeUser)!;
-
-  //   Map<String, dynamic> mapUser = json.decode(jsonUser);
-
-  //   LoginModel user = LoginModel.fromJson(mapUser);
-  //   return user;
-  // }
 }
